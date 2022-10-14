@@ -1,23 +1,56 @@
-import logo from './logo.svg';
-import './App.css';
+import {
+  Navbar,
+  Container,
+  Nav,
+  Form,
+  Button,
+  Carousel,
+} from "react-bootstrap";
+import "./App.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { Routes, Route, Link } from "react-router-dom";
+import Main from "./components/Main";
+import Create from "./components/Create";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+    <div>
+      <Navbar bg="light" variant="light">
+        <Container>
+          <Navbar.Brand href="/">
+            <img width={50} src="/logo.png" alt="logo"></img>
+          </Navbar.Brand>
+          <Nav className="me-auto">
+            <Nav.Link href="/create">NFT발행하기</Nav.Link>
+          </Nav>
+          <Form className="d-flex">
+            <Form.Control
+              type="search"
+              placeholder="찾으시는 작품이 있나요?"
+              className="me-2"
+              aria-label="Search"
+            />
+            <Button variant="outline-success">Search</Button>
+          </Form>
+        </Container>
+      </Navbar>
+      <Routes>
+        <Route path="/" element={<Main></Main>} />
+        <Route path="/create" element={<Create></Create>} />
+        <Route path="/detail/:id" element={<div>상세페이지임</div>} />
+        <Route path="/buy" element={<div>구매페이지임</div>} />
+
+        <Route path="*" element={<div>없는페이지임</div>} />
+      </Routes>
+
+      {/* footer  */}
+      <footer className="jumbotron text-center mt-5 mb-0">
+        <h3 className="text-secondary">NFT - Market</h3>
         <p>
-          Edit <code>src/App.js</code> and save to reload.
+          NM’s Homepage is designed by
+          <span className="text-primary"> jinwoo</span>
         </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      </footer>
     </div>
   );
 }
