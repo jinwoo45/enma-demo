@@ -11,6 +11,9 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Routes, Route, Link } from "react-router-dom";
 import Main from "./components/Main";
 import Create from "./components/Create";
+import Detail from "./components/Detail";
+
+import { useState } from "react";
 
 function App() {
   return (
@@ -37,9 +40,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Main></Main>} />
         <Route path="/create" element={<Create></Create>} />
-        <Route path="/detail/:id" element={<div>상세페이지임</div>} />
-        <Route path="/buy" element={<div>구매페이지임</div>} />
-
+        <Route path="/detail/:id" element={<Detail></Detail>} />
         <Route path="*" element={<div>없는페이지임</div>} />
       </Routes>
 
