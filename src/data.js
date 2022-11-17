@@ -21,7 +21,7 @@ let data = [
   },
   {
     id: 3,
-    title: "상품명",
+    title: "Black Tree",
     content: "Born in the States",
     price: 130000,
   },

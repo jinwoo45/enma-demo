@@ -4,13 +4,27 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
+import { Web3ReactProvider } from "@web3-react/core";
+import { Web3Provider } from "@ethersproject/providers";
+import store from "./store.js";
+import { Provider } from "react-redux";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
+
+function getLibrary(provider) {
+  const library = new Web3Provider(provider, "any");
+  return library;
+}
+
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <Provider store={store}>
+      <BrowserRouter>
+        <Web3ReactProvider getLibrary={getLibrary}>
+          <App />
+        </Web3ReactProvider>
+      </BrowserRouter>
+    </Provider>
   </React.StrictMode>
 );
 
