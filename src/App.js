@@ -37,20 +37,10 @@ function App() {
             <img width={50} src="/logo.png" alt="logo"></img>
           </Navbar.Brand>
           <Nav className="me-auto">
-            {/* <Nav.Link href="/create">NFT발행하기</Nav.Link> */}
             <Nav.Link onClick={() => navigate("/sellNFT")}>
               NFT 판매하기
             </Nav.Link>
           </Nav>
-          <Form className="d-flex">
-            {/* <Form.Control
-              type="search"
-              placeholder="찾으시는 작품이 있나요?"
-              className="me-2"
-              aria-label="Search"
-            /> */}
-            {/* <Button variant="outline-success">Search</Button> */}
-          </Form>
 
           {account ? (
             <Button variant="outline-success">🦊 {account}</Button>
@@ -79,7 +69,7 @@ function App() {
         />
         <Route path="/create" element={<Create></Create>} />
         <Route path="/sellNFT" element={<Sale></Sale>} />
-        <Route path="/nftlist" element={<NFTList></NFTList>} />
+        <Route path="/nftList" element={<NFTList></NFTList>} />
         <Route path="/nftlist/:id" element={<Detail></Detail>} />
         <Route path="/auctionlist" element={<AuctionList></AuctionList>} />
         <Route path="/auctionlist/:id" element={<Detail></Detail>} />

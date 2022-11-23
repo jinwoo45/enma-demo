@@ -1,0 +1,11 @@
+.saleButton {
+  background-color: white;
+  border: 1px solid #777;
+  width: 50%;
+  margin: 20px 0;
+  padding: 20px;
+}
+
+.active {
+  background-color: #6c5ce7;
+}

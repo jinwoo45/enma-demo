@@ -38,7 +38,7 @@ const Main = () => {
       <div className="container mt-5">
         <h3 className="mb-4">
           🔥 NFT 컬렉션
-          <Link to="/nftlist">
+          <Link to="/nftList">
             <GreySpan>See All</GreySpan>
           </Link>
         </h3>
@@ -52,7 +52,7 @@ const Main = () => {
               className="col-md-3"
             >
               <img
-                src={`/Rectangle 40` + item[i].id + `.png`}
+                src={`img/Rectangle 40` + item[i].id + `.png`}
                 width="80%"
                 alt="nft"
               />
@@ -65,7 +65,7 @@ const Main = () => {
       <div className="container mt-5">
         <h3 className="mb-4">
           ⏱️ 라이브 경매
-          <Link to="/auctionlist">
+          <Link to="/auctionList">
             <GreySpan>See All</GreySpan>
           </Link>
         </h3>
@@ -80,7 +80,7 @@ const Main = () => {
               style={{ position: "relative" }}
             >
               <img
-                src={`/Rectangle 40` + item[i].id + `.png`}
+                src={`img/Rectangle 40` + item[i].id + `.png`}
                 width="80%"
                 alt="nft"
               ></img>
@@ -105,11 +105,6 @@ function UncontrolledExample() {
       </Carousel.Item>
       <Carousel.Item>
         <img src="/banner.png" alt="banner"></img>
-
-        {/* <Carousel.Caption>
-            <h3>Second slide label</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-          </Carousel.Caption> */}
       </Carousel.Item>
       <Carousel.Item>
         <img src="/banner.png" alt="banner"></img>

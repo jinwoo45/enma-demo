@@ -12,7 +12,7 @@ const Detail = () => {
         <div className="row">
           <div className="col-md-6">
             <img
-              src={`/Rectangle 40` + item[id].id + `.png`}
+              src={`../img/Rectangle 40` + item[id].id + `.png`}
               width="80%"
               alt="nft"
             />
