@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import data from "../data.js";
 import { useNavigate, Link } from "react-router-dom";
 import styled from "styled-components";
-
+import axios from "axios";
 const AuctionList = () => {
   const [item] = useState(data);
   let navigate = useNavigate();
@@ -14,6 +14,21 @@ const AuctionList = () => {
     padding: 5px 10px;
     border-radius: 5px;
   `;
+
+  const viewList = async () => {
+    await axios
+      .get("http://54.164.86.134:8080/v1/auctionList")
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    viewList();
+  }, []);
 
   return (
     <div className="container mt-5">

@@ -1,12 +1,18 @@
 import { configureStore, createSlice } from "@reduxjs/toolkit";
 
-let user = createSlice({
-  name: "user",
-  initialState: "kim",
+let instance = createSlice({
+  name: "instance",
+  initialState: {},
+  reducers: {
+    initInstance(state, a) {
+      return a.payload;
+    },
+  },
 });
+export let { initInstance } = instance.actions;
 
 export default configureStore({
   reducer: {
-    user: user.reducer,
+    instance: instance.reducer,
   },
 });

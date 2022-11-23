@@ -2,9 +2,14 @@ import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import styles from "../assets/css/Sale.module.css";
+import { useSelector } from "react-redux";
+
 const Sale = () => {
   const [tab, setTab] = useState(false);
-
+  let a = useSelector((state) => {
+    return state;
+  });
+  console.log(a);
   return (
     <div className="container">
       <h3 className="text-center mt-5">NFT 판매하기</h3>
