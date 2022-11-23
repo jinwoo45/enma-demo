@@ -34,7 +34,7 @@ function App() {
   // };
   let navigate = useNavigate();
   const dispatch = useDispatch();
-  const [contract, setContract] = useState([]);
+  const [contract, setContract] = useState("jinwoo");
 
   async function connect() {
     if (typeof window.ethereum !== "undefined") {
@@ -58,12 +58,16 @@ function App() {
         );
         setContract(Instance);
         console.log(Instance);
+        console.log(contract);
+        //두번째 실행 때 적용됨
         dispatch(initInstance(contract));
+        // dispatch(initInstance(contract));
       } catch (e) {
         console.log(e);
       }
     } else {
     }
+    // dispatch(initInstance(contract));
   }
 
   return (
