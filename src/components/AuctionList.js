@@ -15,11 +15,14 @@ const AuctionList = () => {
     border-radius: 5px;
   `;
 
+  const [auctionList, setAuctionList] = useState([]);
+
   const viewList = async () => {
     await axios
       .get("http://54.164.86.134:8080/v1/auctionList")
       .then((response) => {
-        console.log(response);
+        console.log(response.data.result.itembids);
+        setAuctionList(response.data.result.itembids);
       })
       .catch((err) => {
         console.log(err);
@@ -35,22 +38,18 @@ const AuctionList = () => {
       <h3 className="mb-4">⏱️ 라이브 경매</h3>
 
       <div className="row">
-        {item.map((a, i) => (
+        {auctionList.map((a, i) => (
           <div
             className="col-md-3"
             onClick={() => {
-              navigate("/auctionList/" + item[i].id);
+              navigate("/auctionList/" + auctionList[i].id);
             }}
             style={{ position: "relative" }}
           >
-            <img
-              src={`img/Rectangle 40` + item[i].id + `.png`}
-              width="80%"
-              alt="nft"
-            ></img>
-            <h4>{item[i].title}</h4>
-            <p>{item[i].content}</p>
-            <WhiteSpan>남은 날짜 : 1 days</WhiteSpan>
+            <img src={`img/Rectangle 402.png`} width="80%" alt="nft"></img>
+            <h4>{auctionList[i].nftId}</h4>
+            <p>시작가 : {auctionList[i].startPrice}Matic</p>
+            <WhiteSpan>남은 날짜 : {auctionList[i].deadline} days</WhiteSpan>
           </div>
         ))}
       </div>

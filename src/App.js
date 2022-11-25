@@ -5,11 +5,9 @@ import { Routes, Route, useNavigate } from "react-router-dom";
 import Main from "./components/Main";
 import Create from "./components/Create";
 import Detail from "./components/Detail";
-import { Web3Button } from "@web3modal/react";
-import { useWeb3React } from "@web3-react/core";
-import { injected } from "./lib/connectors";
 import { useState, useEffect } from "react";
 import AuctionList from "./components/AuctionList";
+import AuctionDetail from "./components/AuctionDetail";
 import NFTList from "./components/NFTList";
 import Sale from "./components/Sale";
 import SmartContract from "./config";
@@ -32,6 +30,9 @@ function App() {
   //     }
   //   });
   // };
+
+  const [chainId, setChainId] = useState("");
+
   let navigate = useNavigate();
   const dispatch = useDispatch();
   const [contract, setContract] = useState("jinwoo");
@@ -42,6 +43,7 @@ function App() {
         await window.ethereum.request({ method: "eth_requestAccounts" });
         let chainId = await window.ethereum.request({ method: "eth_chainId" });
         console.log(chainId);
+        setChainId(chainId);
         console.log(SmartContract);
         console.log(SmartContract.contractAddress);
         console.log(SmartContract.abi.contractABI);
@@ -56,19 +58,21 @@ function App() {
           SmartContract.abi.contractABI,
           signer
         );
-        setContract(Instance);
         console.log(Instance);
-        console.log(contract);
+        setContract(Instance);
         //두번째 실행 때 적용됨
-        dispatch(initInstance(contract));
-        // dispatch(initInstance(contract));
       } catch (e) {
-        console.log(e);
+        console.log("실패함");
       }
     } else {
     }
-    // dispatch(initInstance(contract));
   }
+
+  const storeContract = () => {
+    connect();
+    console.log(contract);
+    dispatch(initInstance(contract));
+  };
 
   return (
     <div>
@@ -90,7 +94,11 @@ function App() {
               지갑 연결하기
             </Button>
           )} */}
-          <Button onClick={connect}>Connect</Button>
+          {chainId ? (
+            <Button onClick={storeContract}>{chainId}</Button>
+          ) : (
+            <Button onClick={storeContract}>Connect</Button>
+          )}
         </Container>
       </Navbar>
       <Routes>
@@ -114,7 +122,10 @@ function App() {
         <Route path="/nftList" element={<NFTList></NFTList>} />
         <Route path="/nftlist/:id" element={<Detail></Detail>} />
         <Route path="/auctionlist" element={<AuctionList></AuctionList>} />
-        <Route path="/auctionlist/:id" element={<Detail></Detail>} />
+        <Route
+          path="/auctionlist/:id"
+          element={<AuctionDetail></AuctionDetail>}
+        />
         <Route path="/*" element={<div>없는페이지임</div>} />
       </Routes>
 

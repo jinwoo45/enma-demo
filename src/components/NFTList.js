@@ -4,14 +4,17 @@ import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 
 const NFTList = () => {
-  const [item] = useState(data);
+  const [item, setItem] = useState(data);
   let navigate = useNavigate();
+
+  const [list, setList] = useState([]);
 
   const viewList = async () => {
     await axios
       .get("http://54.164.86.134:8080/v1/nftList")
       .then((response) => {
-        console.log(response);
+        console.log(response.data.result.itemsells);
+        setList(response.data.result.itemsells);
       })
       .catch((err) => {
         console.log(err);
@@ -26,20 +29,16 @@ const NFTList = () => {
       <h3 className="mb-4">🔥 NFT 컬렉션</h3>
 
       <div className="row">
-        {item.map((a, i) => (
+        {list.map((a, i) => (
           <div
             onClick={() => {
-              navigate("/nftList/" + item[i].id);
+              navigate("/nftList/" + list[i].id);
             }}
             className="col-md-3"
           >
-            <img
-              src={`img/Rectangle 40` + item[i].id + `.png`}
-              width="80%"
-              alt="nft"
-            />
-            <h4>{item[i].title}</h4>
-            <p>{item[i].content}</p>
+            <img src={`img/Rectangle 401.png`} width="80%" alt="nft" />
+            <h4>{list[i].nftId}</h4>
+            <p>{list[i].price}</p>
           </div>
         ))}
       </div>

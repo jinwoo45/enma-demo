@@ -47,7 +47,7 @@ const Main = () => {
           {item.map((a, i) => (
             <div
               onClick={() => {
-                navigate("/nftList/" + item[i].id);
+                navigate("/nftList");
               }}
               className="col-md-3"
             >
@@ -75,7 +75,7 @@ const Main = () => {
             <div
               className="col-md-3"
               onClick={() => {
-                navigate("/auctionList/" + item[i].id);
+                navigate("/auctionList");
               }}
               style={{ position: "relative" }}
             >
