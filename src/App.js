@@ -33,7 +33,6 @@ function App() {
   // const dispatch = useDispatch();
 
   useEffect(() => {
-    lab();
     async function exec() {
       const accounts = await window.ethereum.request({
         method: "eth_accounts",
@@ -41,8 +40,10 @@ function App() {
       console.log("accounts =>", accounts);
       if (accounts.length > 0) {
         await connect();
+        lab();
       }
     }
+
     exec();
   }, []);
 

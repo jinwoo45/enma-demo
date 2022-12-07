@@ -37,11 +37,13 @@ const AuctionDetail = (props) => {
       });
   };
 
-  const bidNFT = () => {
-    props.market.bidNFT(props.nft.address, startPrice, list.nftId);
+  const bidNFT = async () => {
+    await props.market.bidNft(props.nft.address, list.nftId, {
+      value: startPrice,
+    });
   };
-  const endAuction = () => {
-    props.market.endAuction(props.nft.address, list.nftId);
+  const endAuction = async () => {
+    await props.market.endAuction(props.nft.address, list.nftId);
   };
 
   async function detailView() {

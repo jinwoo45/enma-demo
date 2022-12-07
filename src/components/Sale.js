@@ -31,14 +31,30 @@ const Sale = (props) => {
     props.market.sellNft(props.nft.address, nftId, price2);
   };
 
-  const startAuction = (e) => {
+  const startAuction = async (e) => {
     e.preventDefault();
-    props.market.startAuction(
+    let approveRes = await props.nft.approve(
+      props.market.address,
+      auctionNftId,
+      {
+        gasPrice: 250000000000,
+      }
+    );
+    approveRes.wait(1);
+
+    let auctionPrice2 = parseEther(auctionPrice).toString();
+
+    const result = props.market.startAuction(
       props.nft.address,
       auctionNftId,
-      auctionPrice,
-      deadline
+      auctionPrice2,
+      deadline,
+      {
+        gasPrice: 250000000000,
+      }
     );
+
+    console.log(result);
   };
 
   return (
