@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
-import data from "../data.js";
 import { useNavigate, Link } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
 const AuctionList = () => {
-  const [item] = useState(data);
   let navigate = useNavigate();
 
   const WhiteSpan = styled.span`
@@ -46,9 +44,17 @@ const AuctionList = () => {
             }}
             style={{ position: "relative" }}
           >
-            <img src={`img/Rectangle 402.png`} width="80%" alt="nft"></img>
+            <img
+              src={
+                `https://enma-nft-content.s3.ap-northeast-2.amazonaws.com/` +
+                auctionList[i].nftId +
+                `.png`
+              }
+              width="80%"
+              alt="nft"
+            ></img>
             <h4>{auctionList[i].nftId}</h4>
-            <p>시작가 : {auctionList[i].startPrice}Matic</p>
+            <p>시작가 : {auctionList[i].startPrice} Matic</p>
             <WhiteSpan>남은 날짜 : {auctionList[i].deadline} days</WhiteSpan>
           </div>
         ))}

@@ -12,6 +12,10 @@ const AuctionDetail = () => {
   });
   console.log(instance);
 
+  useEffect(() => {
+    viewList();
+  }, []);
+
   const viewList = async () => {
     await axios
       .get(`http://54.164.86.134:8080/v1/auctionList/` + id)
@@ -24,9 +28,6 @@ const AuctionDetail = () => {
         console.log(err);
       });
   };
-  useEffect(() => {
-    viewList();
-  }, []);
 
   const bidNFT = () => {
     instance.bidNFT(list.nftId);

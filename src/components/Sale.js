@@ -3,16 +3,49 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import styles from "../assets/css/Sale.module.css";
 import { useSelector } from "react-redux";
+import { parseEther, formatEther } from "ethers/lib/utils";
 
-const Sale = () => {
+const Sale = (props) => {
   const [tab, setTab] = useState(false);
-  let instance = useSelector((state) => {
-    return state;
-  });
-  console.log(instance);
+
+  // let instance = useSelector((state) => {
+  //   return state;
+  // });
+  // console.log(instance);
+
+  const [nftId, setNftId] = useState("");
+  const onChange1 = (e) => {
+    setNftId(e.target.value);
+  };
+
+  const [price, setPrice] = useState("");
+  const onChange2 = (e) => {
+    console.log(price);
+    setPrice(e.target.value);
+  };
+
+  const sale = async (e) => {
+    e.preventDefault();
+    console.log(nftId, props.market.address, price);
+    console.log(await props.nft.owner());
+    let approveRes = await props.nft.approve(props.market.address, nftId);
+    approveRes.wait(1);
+    // let approveRes = await props.nft.approve(
+    //   "0x024437cAc8B345B5c7B2805281b6d970f605707b",
+    //   nftId
+    // );
+    console.log(approveRes);
+
+    let price2 = parseEther(price).toString();
+    props.market.sellNft(props.market.address, nftId, price2);
+  };
+
   return (
     <div className="container">
-      <h3 className="text-center mt-5" onClick={() => instance.tokenURI(16)}>
+      <h3
+        className="text-center mt-5"
+        onClick={async () => console.log(await props.nft.owner())}
+      >
         NFT 판매하기
       </h3>
       <div>
@@ -42,9 +75,27 @@ const Sale = () => {
         </button>
       </div>
       {tab === true ? (
-        <AuctionExample instance={instance}></AuctionExample>
+        <AuctionExample props={props}></AuctionExample>
       ) : (
-        <SaleExample instance={instance}></SaleExample>
+        <Form>
+          {/* <Form.Group className="mb-3" controlId="formBasicEmail">
+          <Form.Label>NFT Address</Form.Label>
+          <Form.Control type="text" value={address} onChange={onChange} />
+        </Form.Group> */}
+          <Form.Group className="mb-3" controlId="formBasicEmail">
+            <Form.Label>NFT ID</Form.Label>
+            <Form.Control type="text" value={nftId} onChange={onChange1} />
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="formBasicEmail">
+            <Form.Label>판매 가격</Form.Label>
+            <Form.Control type="text" value={price} onChange={onChange2} />
+          </Form.Group>
+
+          <Button variant="primary" onClick={sale}>
+            SELL
+          </Button>
+        </Form>
       )}
     </div>
   );
@@ -88,6 +139,7 @@ function AuctionExample(props) {
     </Form>
   );
 }
+
 function SaleExample(props) {
   const [address, setAddress] = useState("");
   const onChange = (e) => {
@@ -101,23 +153,35 @@ function SaleExample(props) {
 
   const [price, setPrice] = useState("");
   const onChange2 = (e) => {
+    console.log(price);
     setPrice(e.target.value);
   };
 
-  const sale = (e) => {
+  const sale = async (e) => {
     e.preventDefault();
     console.log(nftId, address, price);
-    console.log(props.instance.instance);
-    console.log(props.instance.instance.sellNft());
-    // props.instance.instance.sellNft(address,nftId, price);
+    console.log(await props.nft.owner());
+    // let approveRes = await props.nft.approve(
+    //   "0x024437cAc8B345B5c7B2805281b6d970f605707b",
+    //   nftId
+    // );
+    // approveRes.wait(1);
+    // console.log(approveRes);
+
+    let price2 = parseEther(price).toString();
+    props.market.sellNft(
+      "0x631C8Ebfd127f72cF244dC46B09cc8bc8A583e05",
+      nftId,
+      price2
+    );
   };
 
   return (
     <Form>
-      <Form.Group className="mb-3" controlId="formBasicEmail">
+      {/* <Form.Group className="mb-3" controlId="formBasicEmail">
         <Form.Label>NFT Address</Form.Label>
         <Form.Control type="text" value={address} onChange={onChange} />
-      </Form.Group>
+      </Form.Group> */}
       <Form.Group className="mb-3" controlId="formBasicEmail">
         <Form.Label>NFT ID</Form.Label>
         <Form.Control type="text" value={nftId} onChange={onChange1} />

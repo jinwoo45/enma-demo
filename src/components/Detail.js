@@ -2,14 +2,23 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import { parseEther, formatEther } from "ethers/lib/utils";
 
-const Detail = () => {
+// import {
+//   QueryClient,
+//   QueryClientProvider,
+//   useQuery,
+// } from "@tanstack/react-query";
+
+const Detail = (props) => {
   let { id } = useParams();
   const [list, setList] = useState([]);
-  let instance = useSelector((state) => {
-    return state;
-  });
-  console.log(instance);
+  const [matic, setMatic] = useState();
+  const [image, setImage] = useState("");
+
+  // let market = useSelector((state) => state.market);
+  // let nft = useSelector((state) => state.nft);
+  // console.log(nft);
 
   const viewList = async () => {
     await axios
@@ -18,6 +27,11 @@ const Detail = () => {
         console.log(response);
         console.log(response.data.result.itemsells[0].id);
         setList(response.data.result.itemsells[0]);
+        console.log("price", list.price);
+        const pri = list.price.toString();
+        let price = formatEther(pri);
+        setMatic(price);
+        console.log(price);
       })
       .catch((err) => {
         console.log(err);
@@ -26,23 +40,45 @@ const Detail = () => {
 
   useEffect(() => {
     viewList();
-  }, []);
+    imageview();
+  });
 
   const buyNFT = async () => {
-    await instance.buyNft(list.price, list.nftContract, list.nftId);
+    console.log(matic);
+    console.log(props.nft.address);
+    console.log(list.nftId);
+    let price2 = parseEther(matic).toString();
+    console.log(price2);
+    // await props.market.buyNft(list.nftContract, list.nftId, { value: matic });
+    await props.market.buyNft(
+      "0x631C8Ebfd127f72cF244dC46B09cc8bc8A583e05",
+      list.nftId,
+      {
+        value: price2,
+      }
+    );
+    // await props.market.buyNft(props.market.address, list.nftId, {
+    //   value: matic,
+    // });
   };
 
-  console.log(id);
+  async function imageview() {
+    const requestURL = await props.nft.tokenURI(list.nftId);
+    const tokenURIResponse = await (await fetch(requestURL)).json();
+    const imageURI = tokenURIResponse.image;
+    setImage(imageURI);
+    console.log(image);
+  }
   return (
     <div>
       <div className="container">
         <div className="row">
           <div className="col-md-6" onClick={() => console.log(list.nftId)}>
-            <img src={`../img/Rectangle 401.png`} width="80%" alt="nft" />
+            <img src={image} width="80%" alt="nft" />
           </div>
           <div className="col-md-6 mt-4">
             <h4 className="pt-5">{list.nftId}</h4>
-            <p>{list.price} Matic</p>
+            <p>{matic} Matic</p>
             <button className="btn btn-danger" onClick={buyNFT}>
               구매하기
             </button>

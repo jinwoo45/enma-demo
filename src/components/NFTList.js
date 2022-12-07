@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
-import data from "../data.js";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 
 const NFTList = () => {
-  const [item, setItem] = useState(data);
   let navigate = useNavigate();
 
   const [list, setList] = useState([]);
@@ -36,9 +34,17 @@ const NFTList = () => {
             }}
             className="col-md-3"
           >
-            <img src={`img/Rectangle 401.png`} width="80%" alt="nft" />
+            <img
+              src={
+                `https://enma-nft-content.s3.ap-northeast-2.amazonaws.com/` +
+                list[i].nftId +
+                `.png`
+              }
+              width="80%"
+              alt="nft"
+            />
             <h4>{list[i].nftId}</h4>
-            <p>{list[i].price}</p>
+            <p>{list[i].price} Matic</p>
           </div>
         ))}
       </div>

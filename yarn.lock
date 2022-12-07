@@ -2610,10 +2610,20 @@
   "resolved" "https://registry.npmjs.org/@tanstack/query-core/-/query-core-4.15.1.tgz"
   "version" "4.15.1"
 
+"@tanstack/query-core@4.19.1":
+  "integrity" "sha512-Zp0aIose5C8skBzqbVFGk9HJsPtUhRVDVNWIqVzFbGQQgYSeLZMd3Sdb4+EnA5wl1J7X+bre2PJGnQg9x/zHOA=="
+  "resolved" "https://registry.npmjs.org/@tanstack/query-core/-/query-core-4.19.1.tgz"
+  "version" "4.19.1"
+
 "@tanstack/query-persist-client-core@4.15.1":
   "integrity" "sha512-ldoGHNJ4Du83CT1CvJQqaJtQXEz4CdGcDmexVoyRG2q8DV9PAfYi+zls462ZbIWxlni93pkEgG1/q4mZVk2nqQ=="
   "resolved" "https://registry.npmjs.org/@tanstack/query-persist-client-core/-/query-persist-client-core-4.15.1.tgz"
   "version" "4.15.1"
+
+"@tanstack/query-persist-client-core@4.19.1":
+  "integrity" "sha512-Tlx9tgeYMDoJ5w8O79TXx85Bk46LDQLvojdjWzQbzKWPIEtvwK6OmG2Z3zxz6qEA3FiVmG0BYjsVMsT6PZOhGg=="
+  "resolved" "https://registry.npmjs.org/@tanstack/query-persist-client-core/-/query-persist-client-core-4.19.1.tgz"
+  "version" "4.19.1"
 
 "@tanstack/query-sync-storage-persister@^4.14.5":
   "integrity" "sha512-uMk8VCTkxTS9F99nSjbJRIsNalv6cwAtBJ6HgX41dYW2BCQR4ZQrM52oohIMbZo8DqlE/gGRtplbCbQ3NDfx4g=="
@@ -2623,18 +2633,18 @@
     "@tanstack/query-persist-client-core" "4.15.1"
 
 "@tanstack/react-query-persist-client@^4.14.5":
-  "integrity" "sha512-7i1Dj9amEDdRz34UMslf11uFs7QSpGqNRT9nFwc17pcJ4I3X7tSiEN1pgrAMg05eqnfGJgnSTZg+RpFR1Nsy+w=="
-  "resolved" "https://registry.npmjs.org/@tanstack/react-query-persist-client/-/react-query-persist-client-4.16.1.tgz"
-  "version" "4.16.1"
+  "integrity" "sha512-uNHCBfK7YiNXTjlO3B/Rym7HrNX6OnrcWIw3iiuGFK+gC566/BB3lcLHvriHwanxbnFvWiua8g9hvddeXVQzeA=="
+  "resolved" "https://registry.npmjs.org/@tanstack/react-query-persist-client/-/react-query-persist-client-4.19.1.tgz"
+  "version" "4.19.1"
   dependencies:
-    "@tanstack/query-persist-client-core" "4.15.1"
+    "@tanstack/query-persist-client-core" "4.19.1"
 
-"@tanstack/react-query@^4.14.5", "@tanstack/react-query@4.16.1":
-  "integrity" "sha512-PDE9u49wSDykPazlCoLFevUpceLjQ0Mm8i6038HgtTEKb/aoVnUZdlUP7C392ds3Cd75+EGlHU7qpEX06R7d9Q=="
-  "resolved" "https://registry.npmjs.org/@tanstack/react-query/-/react-query-4.16.1.tgz"
-  "version" "4.16.1"
+"@tanstack/react-query@^4.14.5", "@tanstack/react-query@^4.19.1", "@tanstack/react-query@4.19.1":
+  "integrity" "sha512-5dvHvmc0vrWI03AJugzvKfirxCyCLe+qawrWFCXdu8t7dklIhJ7D5ZhgTypv7mMtIpdHPcECtCiT/+V74wCn2A=="
+  "resolved" "https://registry.npmjs.org/@tanstack/react-query/-/react-query-4.19.1.tgz"
+  "version" "4.19.1"
   dependencies:
-    "@tanstack/query-core" "4.15.1"
+    "@tanstack/query-core" "4.19.1"
     "use-sync-external-store" "^1.2.0"
 
 "@testing-library/dom@^8.5.0", "@testing-library/dom@>=7.21.4":

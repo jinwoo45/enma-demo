@@ -1,41 +1,33 @@
+import { useState } from "react";
 import { Navbar, Container, Nav, Form, Button } from "react-bootstrap";
 import "./App.css";
-import "bootstrap/dist/css/bootstrap.min.css";
 import { Routes, Route, useNavigate } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
 import Main from "./components/Main";
 import Create from "./components/Create";
 import Detail from "./components/Detail";
-import { useState, useEffect } from "react";
 import AuctionList from "./components/AuctionList";
 import AuctionDetail from "./components/AuctionDetail";
 import NFTList from "./components/NFTList";
 import Sale from "./components/Sale";
-import SmartContract from "./config";
 import { ethers } from "ethers";
 import { useDispatch } from "react-redux";
-import { initInstance } from "./store.js";
+import { marketAction } from "./redux/actions/marketAction";
+import { nftAction } from "./redux/actions/nftAction";
+import SmartContract from "./config";
+
+const marketAddress = SmartContract.marketAddress;
+const marketABI = SmartContract.abi.marketABI;
+const nftAddress = SmartContract.nftAddress;
+const nftABI = SmartContract.abi.nftABI;
 
 function App() {
-  // const { chainId, account, active, activate, deactivate } = useWeb3React();
-
-  // const handleConnect = () => {
-  //   if (active) {
-  //     deactivate();
-  //     return;
-  //   }
-
-  //   activate(injected, (error) => {
-  //     if ("/No Ethereum provider was found on window.ethereum/".test()) {
-  //       window.open("https://metamask.io/download.html");
-  //     }
-  //   });
-  // };
-
   const [chainId, setChainId] = useState("");
+  const [market, setMarket] = useState("");
+  const [nft, setNft] = useState("");
 
   let navigate = useNavigate();
-  const dispatch = useDispatch();
-  const [contract, setContract] = useState("jinwoo");
+  // const dispatch = useDispatch();
 
   async function connect() {
     if (typeof window.ethereum !== "undefined") {
@@ -44,35 +36,39 @@ function App() {
         let chainId = await window.ethereum.request({ method: "eth_chainId" });
         console.log(chainId);
         setChainId(chainId);
-        console.log(SmartContract);
-        console.log(SmartContract.contractAddress);
-        console.log(SmartContract.abi.contractABI);
-        // if (chainId !== 80001) {
-        //   await switchChain();
-        // }
+
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
 
-        const Instance = new ethers.Contract(
-          SmartContract.contractAddress,
-          SmartContract.abi.contractABI,
-          signer
-        );
-        console.log(Instance);
-        setContract(Instance);
-        //두번째 실행 때 적용됨
+        const Market = new ethers.Contract(marketAddress, marketABI, signer);
+        const Nft = new ethers.Contract(nftAddress, nftABI, signer);
+        setMarket(Market);
+        setNft(Nft);
       } catch (e) {
         console.log("실패함");
       }
     } else {
     }
   }
+  // async function connect() {
+  //   if (typeof window.ethereum !== "undefined") {
+  //     try {
+  //       await window.ethereum.request({ method: "eth_requestAccounts" });
+  //       let chainId = await window.ethereum.request({ method: "eth_chainId" });
+  //       console.log(chainId);
+  //       setChainId(chainId);
 
-  const storeContract = () => {
-    connect();
-    console.log(contract);
-    dispatch(initInstance(contract));
-  };
+  //       const provider = new ethers.providers.Web3Provider(window.ethereum);
+  //       const signer = provider.getSigner();
+
+  //       dispatch(marketAction.getMarket(signer));
+  //       dispatch(nftAction.getNft(signer));
+  //     } catch (e) {
+  //       console.log("실패함");
+  //     }
+  //   } else {
+  //   }
+  // }
 
   return (
     <div>
@@ -82,51 +78,48 @@ function App() {
             <img width={50} src="/logo.png" alt="logo"></img>
           </Navbar.Brand>
           <Nav className="me-auto">
+            <Nav.Link onClick={() => navigate("/nftList")}>컬렉션</Nav.Link>
+            <Nav.Link onClick={() => navigate("/auctionList")}>옥션</Nav.Link>
             <Nav.Link onClick={() => navigate("/sellNFT")}>
               NFT 판매하기
             </Nav.Link>
           </Nav>
-
-          {/* {account ? (
-            <Button variant="outline-success">🦊 {account}</Button>
-          ) : (
-            <Button variant="outline-success" onClick={handleConnect}>
-              지갑 연결하기
-            </Button>
-          )} */}
           {chainId ? (
-            <Button onClick={storeContract}>{chainId}</Button>
+            <Button onClick={connect}>🦊 {chainId}</Button>
           ) : (
-            <Button onClick={storeContract}>Connect</Button>
+            <Button onClick={connect}>Connect</Button>
           )}
         </Container>
       </Navbar>
       <Routes>
+        <Route path="/" element={<Main></Main>} />
+        {/* <Route path="/create" element={<Create></Create>} /> */}
+        {/* 판매페이지 */}
         <Route
-          path="/"
-          element={
-            <>
-              <Main></Main>
-              <footer className="jumbotron text-center mt-5 mb-0">
-                <h3 className="text-secondary">NFT - Market Place</h3>
-                <p>
-                  NM’s page is designed by
-                  <span className="text-primary"> jinwoo</span>
-                </p>
-              </footer>
-            </>
-          }
+          path="/sellNFT"
+          element={<Sale nft={nft} market={market}></Sale>}
         />
-        <Route path="/create" element={<Create></Create>} />
-        <Route path="/sellNFT" element={<Sale></Sale>} />
-        <Route path="/nftList" element={<NFTList></NFTList>} />
-        <Route path="/nftlist/:id" element={<Detail></Detail>} />
-        <Route path="/auctionlist" element={<AuctionList></AuctionList>} />
+        {/* 판매리스트 */}
+        <Route
+          path="/nftList"
+          element={<NFTList nft={nft} market={market}></NFTList>}
+        />
+        {/* 리스트디테일 */}
+        <Route
+          path="/nftlist/:id"
+          element={<Detail nft={nft} market={market}></Detail>}
+        />
+        {/* 경매리스트 */}
+        <Route
+          path="/auctionlist"
+          element={<AuctionList nft={nft} market={market}></AuctionList>}
+        />
+        {/* 경매디테일 */}
         <Route
           path="/auctionlist/:id"
-          element={<AuctionDetail></AuctionDetail>}
+          element={<AuctionDetail nft={nft} market={market}></AuctionDetail>}
         />
-        <Route path="/*" element={<div>없는페이지임</div>} />
+        <Route path="/*" element={<div>404 not found ㅋ</div>} />
       </Routes>
 
       {/* footer  */}
