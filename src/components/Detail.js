@@ -25,14 +25,12 @@ const Detail = (props) => {
     await axios
       .get(`http://54.164.86.134:8080/v1/nftList/` + id)
       .then((response) => {
-        console.log(response);
-        console.log(response.data.result.itemsells[0].id);
         setList(response.data.result.itemsells[0]);
-        console.log("price", list.price);
+        // console.log("price", list.price);
         const pri = list.price.toString();
         let price = formatEther(pri);
         setMatic(price);
-        console.log(price);
+        // console.log(price);
       })
       .catch((err) => {
         console.log(err);
@@ -45,11 +43,11 @@ const Detail = (props) => {
   });
 
   const buyNFT = async () => {
-    console.log(matic);
-    console.log(props.nft.address);
-    console.log(list.nftId);
+    // console.log(matic);
+    // console.log(props.nft.address);
+    // console.log(list.nftId);
     let price2 = parseEther(matic).toString();
-    console.log(price2);
+    // console.log(price2);
     // await props.market.buyNft(list.nftContract, list.nftId, { value: matic });
     await props.market.buyNft(
       "0x631C8Ebfd127f72cF244dC46B09cc8bc8A583e05",
@@ -66,20 +64,23 @@ const Detail = (props) => {
   async function detailView() {
     const requestURL = await props.nft.tokenURI(list.nftId);
     const tokenURIResponse = await (await fetch(requestURL)).json();
-    console.log(tokenURIResponse);
+    // console.log(tokenURIResponse);
 
     setImage(tokenURIResponse.image);
     setTitle(tokenURIResponse.name);
     setDescription(tokenURIResponse.description);
 
-    console.log(image);
+    // console.log(image);
   }
 
   return (
     <div>
       <div className="container">
         <div className="row">
-          <div className="col-md-6" onClick={() => console.log(list.nftId)}>
+          <div
+            className="col-md-6 mt-5"
+            onClick={() => console.log(list.nftId)}
+          >
             <img src={image} width="80%" alt="nft" />
           </div>
           <div className="col-md-6 mt-4">

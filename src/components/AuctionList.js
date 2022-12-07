@@ -35,14 +35,11 @@ const AuctionList = (props) => {
 
   return (
     <div className="container mt-5">
-      <h3 className="mb-4" style={{ textAlign: "center" }}>
-        ⏱️ {props.blockTimestamp}
-      </h3>
       <h3 className="mb-4">🔥 라이브 경매</h3>
 
       <div className="row">
         {auctionList.map((a, i) =>
-          props.blockTimestamp >= auctionList[i].deadline ? (
+          props.blockTimestamp <= auctionList[i].deadline ? (
             // 고쳐야함
             <div
               className="col-md-3"
@@ -64,7 +61,7 @@ const AuctionList = (props) => {
               <p>
                 시작가 {formatEther(auctionList[i].startPrice.toString())} Matic
               </p>
-              <WhiteSpan>block.stamp {auctionList[i].deadline}</WhiteSpan>
+              <WhiteSpan>time {auctionList[i].deadline}</WhiteSpan>
             </div>
           ) : (
             false
