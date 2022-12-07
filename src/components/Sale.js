@@ -2,42 +2,43 @@ import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import styles from "../assets/css/Sale.module.css";
-import { useSelector } from "react-redux";
 import { parseEther, formatEther } from "ethers/lib/utils";
 
 const Sale = (props) => {
   const [tab, setTab] = useState(false);
 
-  // let instance = useSelector((state) => {
-  //   return state;
-  // });
-  // console.log(instance);
-
   const [nftId, setNftId] = useState("");
-  const onChange1 = (e) => {
-    setNftId(e.target.value);
-  };
-
   const [price, setPrice] = useState("");
-  const onChange2 = (e) => {
-    console.log(price);
-    setPrice(e.target.value);
-  };
+
+  const [auctionNftId, setAuctionNftId] = useState("");
+  const [auctionPrice, setAuctionPrice] = useState("");
+  const [deadline, setDeadline] = useState("");
 
   const sale = async (e) => {
     e.preventDefault();
-    console.log(nftId, props.market.address, price);
-    console.log(await props.nft.owner());
-    let approveRes = await props.nft.approve(props.market.address, nftId);
+    console.log(nftId, props.nft.address, price);
+    // console.log(await props.nft.owner());
+    let approveRes = await props.nft.approve(props.market.address, nftId, {
+      gasPrice: 250000000000,
+    });
     approveRes.wait(1);
     // let approveRes = await props.nft.approve(
     //   "0x024437cAc8B345B5c7B2805281b6d970f605707b",
     //   nftId
     // );
     console.log(approveRes);
-
     let price2 = parseEther(price).toString();
-    props.market.sellNft(props.market.address, nftId, price2);
+    props.market.sellNft(props.nft.address, nftId, price2);
+  };
+
+  const startAuction = (e) => {
+    e.preventDefault();
+    props.market.startAuction(
+      props.nft.address,
+      auctionNftId,
+      auctionPrice,
+      deadline
+    );
   };
 
   return (
@@ -75,21 +76,61 @@ const Sale = (props) => {
         </button>
       </div>
       {tab === true ? (
-        <AuctionExample props={props}></AuctionExample>
-      ) : (
         <Form>
-          {/* <Form.Group className="mb-3" controlId="formBasicEmail">
-          <Form.Label>NFT Address</Form.Label>
-          <Form.Control type="text" value={address} onChange={onChange} />
-        </Form.Group> */}
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label>NFT ID</Form.Label>
-            <Form.Control type="text" value={nftId} onChange={onChange1} />
+            <Form.Control
+              type="text"
+              onChange={(e) => {
+                setAuctionNftId(e.target.value);
+              }}
+            />
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="formBasicEmail">
+            <Form.Label>판매 가격(최소)</Form.Label>
+            <Form.Control
+              type="text"
+              onChange={(e) => {
+                setAuctionPrice(e.target.value);
+              }}
+            />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="formBasicEmail">
+            <Form.Label>경매 기간(일수 단위)</Form.Label>
+            <Form.Control
+              type="number"
+              onChange={(e) => {
+                setDeadline(e.target.value);
+              }}
+            />
+          </Form.Group>
+          <Button variant="primary" onClick={startAuction}>
+            START AUCTION
+          </Button>
+        </Form>
+      ) : (
+        <Form>
+          <Form.Group className="mb-3" controlId="formBasicEmail">
+            <Form.Label>NFT ID</Form.Label>
+            <Form.Control
+              type="text"
+              value={nftId}
+              onChange={(e) => {
+                setNftId(e.target.value);
+              }}
+            />
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label>판매 가격</Form.Label>
-            <Form.Control type="text" value={price} onChange={onChange2} />
+            <Form.Control
+              type="text"
+              value={price}
+              onChange={(e) => {
+                setPrice(e.target.value);
+              }}
+            />
           </Form.Group>
 
           <Button variant="primary" onClick={sale}>
@@ -102,99 +143,3 @@ const Sale = (props) => {
 };
 
 export default Sale;
-
-function AuctionExample(props) {
-  const [address, setAddress] = useState("");
-  const [nftId, setNftId] = useState("");
-  const [price, setPrice] = useState("");
-
-  const bid = (e) => {
-    e.preventDefault();
-    console.log(props.instance.instance);
-    console.log(props.instance.instance.startAuction());
-    props.instance.instance.startAuction(address, nftId, price);
-  };
-  return (
-    <Form>
-      <Form.Group className="mb-3" controlId="formBasicEmail">
-        <Form.Label>NFT Address</Form.Label>
-        <Form.Control type="text" />
-      </Form.Group>
-      <Form.Group className="mb-3" controlId="formBasicEmail">
-        <Form.Label>NFT ID</Form.Label>
-        <Form.Control type="text" />
-      </Form.Group>
-
-      <Form.Group className="mb-3" controlId="formBasicEmail">
-        <Form.Label>판매 가격(최소)</Form.Label>
-        <Form.Control type="text" />
-      </Form.Group>
-      <Form.Group className="mb-3" controlId="formBasicEmail">
-        <Form.Label>경매 기간</Form.Label>
-        <Form.Control type="number" />
-      </Form.Group>
-      <Button variant="primary" onClick={bid}>
-        SELL
-      </Button>
-    </Form>
-  );
-}
-
-function SaleExample(props) {
-  const [address, setAddress] = useState("");
-  const onChange = (e) => {
-    setAddress(e.target.value);
-  };
-
-  const [nftId, setNftId] = useState("");
-  const onChange1 = (e) => {
-    setNftId(e.target.value);
-  };
-
-  const [price, setPrice] = useState("");
-  const onChange2 = (e) => {
-    console.log(price);
-    setPrice(e.target.value);
-  };
-
-  const sale = async (e) => {
-    e.preventDefault();
-    console.log(nftId, address, price);
-    console.log(await props.nft.owner());
-    // let approveRes = await props.nft.approve(
-    //   "0x024437cAc8B345B5c7B2805281b6d970f605707b",
-    //   nftId
-    // );
-    // approveRes.wait(1);
-    // console.log(approveRes);
-
-    let price2 = parseEther(price).toString();
-    props.market.sellNft(
-      "0x631C8Ebfd127f72cF244dC46B09cc8bc8A583e05",
-      nftId,
-      price2
-    );
-  };
-
-  return (
-    <Form>
-      {/* <Form.Group className="mb-3" controlId="formBasicEmail">
-        <Form.Label>NFT Address</Form.Label>
-        <Form.Control type="text" value={address} onChange={onChange} />
-      </Form.Group> */}
-      <Form.Group className="mb-3" controlId="formBasicEmail">
-        <Form.Label>NFT ID</Form.Label>
-        <Form.Control type="text" value={nftId} onChange={onChange1} />
-      </Form.Group>
-
-      <Form.Group className="mb-3" controlId="formBasicEmail">
-        <Form.Label>판매 가격</Form.Label>
-        <Form.Control type="text" value={price} onChange={onChange2} />
-      </Form.Group>
-
-      <Button variant="primary" onClick={sale}>
-        SELL
-      </Button>
-    </Form>
-  );
-}

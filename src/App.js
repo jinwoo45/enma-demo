@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Navbar, Container, Nav, Form, Button } from "react-bootstrap";
 import "./App.css";
 import { Routes, Route, useNavigate } from "react-router-dom";
@@ -15,6 +15,7 @@ import { useDispatch } from "react-redux";
 import { marketAction } from "./redux/actions/marketAction";
 import { nftAction } from "./redux/actions/nftAction";
 import SmartContract from "./config";
+import axios from "axios";
 
 const marketAddress = SmartContract.marketAddress;
 const marketABI = SmartContract.abi.marketABI;
@@ -25,9 +26,25 @@ function App() {
   const [chainId, setChainId] = useState("");
   const [market, setMarket] = useState("");
   const [nft, setNft] = useState("");
+  const [provider, setProvider] = useState("");
+  const [blockTimestamp, setBlockTimestamp] = useState("");
 
   let navigate = useNavigate();
   // const dispatch = useDispatch();
+
+  useEffect(() => {
+    lab();
+    async function exec() {
+      const accounts = await window.ethereum.request({
+        method: "eth_accounts",
+      });
+      console.log("accounts =>", accounts);
+      if (accounts.length > 0) {
+        await connect();
+      }
+    }
+    exec();
+  }, []);
 
   async function connect() {
     if (typeof window.ethereum !== "undefined") {
@@ -39,6 +56,7 @@ function App() {
 
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
+        setProvider(provider);
 
         const Market = new ethers.Contract(marketAddress, marketABI, signer);
         const Nft = new ethers.Contract(nftAddress, nftABI, signer);
@@ -69,6 +87,13 @@ function App() {
   //   } else {
   //   }
   // }
+
+  async function lab() {
+    let blockNumber = await provider.getBlockNumber();
+    let block = await provider.getBlock(blockNumber);
+    console.log(block.timestamp);
+    setBlockTimestamp(block.timestamp);
+  }
 
   return (
     <div>
@@ -112,7 +137,13 @@ function App() {
         {/* 경매리스트 */}
         <Route
           path="/auctionlist"
-          element={<AuctionList nft={nft} market={market}></AuctionList>}
+          element={
+            <AuctionList
+              nft={nft}
+              market={market}
+              blockTimestamp={blockTimestamp}
+            ></AuctionList>
+          }
         />
         {/* 경매디테일 */}
         <Route

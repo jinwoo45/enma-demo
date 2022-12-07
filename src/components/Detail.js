@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { useSelector } from "react-redux";
 import { parseEther, formatEther } from "ethers/lib/utils";
 
 // import {
@@ -15,6 +14,8 @@ const Detail = (props) => {
   const [list, setList] = useState([]);
   const [matic, setMatic] = useState();
   const [image, setImage] = useState("");
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
 
   // let market = useSelector((state) => state.market);
   // let nft = useSelector((state) => state.nft);
@@ -40,7 +41,7 @@ const Detail = (props) => {
 
   useEffect(() => {
     viewList();
-    imageview();
+    detailView();
   });
 
   const buyNFT = async () => {
@@ -62,13 +63,18 @@ const Detail = (props) => {
     // });
   };
 
-  async function imageview() {
+  async function detailView() {
     const requestURL = await props.nft.tokenURI(list.nftId);
     const tokenURIResponse = await (await fetch(requestURL)).json();
-    const imageURI = tokenURIResponse.image;
-    setImage(imageURI);
+    console.log(tokenURIResponse);
+
+    setImage(tokenURIResponse.image);
+    setTitle(tokenURIResponse.name);
+    setDescription(tokenURIResponse.description);
+
     console.log(image);
   }
+
   return (
     <div>
       <div className="container">
@@ -77,7 +83,8 @@ const Detail = (props) => {
             <img src={image} width="80%" alt="nft" />
           </div>
           <div className="col-md-6 mt-4">
-            <h4 className="pt-5">{list.nftId}</h4>
+            <h4 className="pt-5">{title}</h4>
+            <p className="pt-1 pb-1">{description}</p>
             <p>{matic} Matic</p>
             <button className="btn btn-danger" onClick={buyNFT}>
               구매하기

@@ -1,20 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { parseEther, formatEther } from "ethers/lib/utils";
 
 import axios from "axios";
 
-const AuctionDetail = () => {
+const AuctionDetail = (props) => {
   let { id } = useParams();
   const [list, setList] = useState([]);
-  let instance = useSelector((state) => {
-    return state;
-  });
-  console.log(instance);
+  const [matic, setMatic] = useState();
+  const [image, setImage] = useState("");
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
 
   useEffect(() => {
     viewList();
-  }, []);
+    detailView();
+  });
 
   const viewList = async () => {
     await axios
@@ -23,6 +24,10 @@ const AuctionDetail = () => {
         console.log(response);
         console.log(response.data.result.itembids[0].id);
         setList(response.data.result.itembids[0]);
+        console.log("price", list.startPrice);
+        const pri = list.startPrice.toString();
+        let price = formatEther(pri);
+        setMatic(price);
       })
       .catch((err) => {
         console.log(err);
@@ -30,29 +35,45 @@ const AuctionDetail = () => {
   };
 
   const bidNFT = () => {
-    instance.bidNFT(list.nftId);
+    props.nft.bidNFT(list.nftId);
   };
   const endAuction = () => {
-    instance.endAuction(list.nftId);
+    props.nft.endAuction(list.nftId);
   };
+
+  async function detailView() {
+    const requestURL = await props.nft.tokenURI(list.nftId);
+    const tokenURIResponse = await (await fetch(requestURL)).json();
+    console.log(tokenURIResponse);
+
+    setImage(tokenURIResponse.image);
+    setTitle(tokenURIResponse.name);
+    setDescription(tokenURIResponse.description);
+
+    console.log(image);
+  }
 
   return (
     <div>
       <div className="container">
         <div className="row">
           <div className="col-md-6" onClick={() => console.log(list.nftId)}>
-            <img src={`../img/Rectangle 402.png`} width="80%" alt="nft" />
+            <img src={image} width="80%" alt="nft" />
           </div>
           <div className="col-md-6 mt-4">
             <h4 className="pt-5">{list.nftId}</h4>
-            <p>{list.startPrice} Matic</p>
-            <p>마감기한 : {list.deadline} days</p>
-            <p>판매자 : {list.seller}</p>
-            <button className="btn btn-danger" onClick={bidNFT}>
+            <p>{matic} Matic</p>
+            <p>deadline : {list.deadline}</p>
+            <p>seller : {list.seller}</p>
+            <button
+              className="btn btn-danger"
+              style={{ marginRight: "10px" }}
+              onClick={bidNFT}
+            >
               입찰
             </button>
             <button className="btn btn-danger" onClick={endAuction}>
-              낙찰
+              낙찰(only seller)
             </button>
           </div>
         </div>
