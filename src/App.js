@@ -28,6 +28,7 @@ function App() {
   const [nft, setNft] = useState("");
   const [provider, setProvider] = useState("");
   const [blockTimestamp, setBlockTimestamp] = useState("");
+  const [account, setAccount] = useState("");
 
   let navigate = useNavigate();
   // const dispatch = useDispatch();
@@ -57,6 +58,8 @@ function App() {
 
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
+        const account = await signer.getAddress();
+        setAccount(account);
         setProvider(provider);
 
         const Market = new ethers.Contract(marketAddress, marketABI, signer);
@@ -111,7 +114,17 @@ function App() {
             </Nav.Link>
           </Nav>
           {chainId ? (
-            <Button onClick={connect}>🦊 {chainId}</Button>
+            <Button
+              style={{
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                width: "180px",
+              }}
+              onClick={connect}
+            >
+              🦊 {account}
+            </Button>
           ) : (
             <Button onClick={connect}>Connect</Button>
           )}
@@ -143,6 +156,7 @@ function App() {
               nft={nft}
               market={market}
               blockTimestamp={blockTimestamp}
+              provider={provider}
             ></AuctionList>
           }
         />

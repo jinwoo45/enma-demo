@@ -16,6 +16,7 @@ const AuctionList = (props) => {
   `;
 
   const [auctionList, setAuctionList] = useState([]);
+  const [blockTimestamp, setBlockTimestamp] = useState("");
 
   const viewList = async () => {
     await axios
@@ -31,7 +32,14 @@ const AuctionList = (props) => {
 
   useEffect(() => {
     viewList();
+    lab();
   }, []);
+  async function lab() {
+    let blockNumber = await props.provider.getBlockNumber();
+    let block = await props.provider.getBlock(blockNumber);
+    console.log(block.timestamp);
+    setBlockTimestamp(block.timestamp);
+  }
 
   return (
     <div className="container mt-5">
@@ -39,7 +47,7 @@ const AuctionList = (props) => {
 
       <div className="row">
         {auctionList.map((a, i) =>
-          props.blockTimestamp <= auctionList[i].deadline ? (
+          blockTimestamp <= auctionList[i].deadline ? (
             // 고쳐야함
             <div
               className="col-md-3"

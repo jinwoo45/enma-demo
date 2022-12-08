@@ -38,9 +38,13 @@ const AuctionDetail = (props) => {
   };
 
   const bidNFT = async () => {
+    console.log(props.nft.address, list.nftId, startPrice);
     await props.market.bidNft(props.nft.address, list.nftId, {
-      value: startPrice,
+      value: parseEther(startPrice),
     });
+    // await props.market.bidNft(props.nft.address, list.nftId, {
+    //   value: startPrice,
+    // });
   };
   const endAuction = async () => {
     await props.market.endAuction(props.nft.address, list.nftId);
